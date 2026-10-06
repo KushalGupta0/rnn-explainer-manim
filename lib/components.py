@@ -17,11 +17,15 @@ from manim import (
     Text,
     MathTex,
     Matrix,
+    Polygon,
+    DashedLine,
     ShowPassingFlash,
     Animation,
     RIGHT,
+    LEFT,
     UP,
     DOWN,
+    UR,
     ORIGIN,
     WHITE,
 )
@@ -445,4 +449,89 @@ def flow_along(
     base_width = target.get_stroke_width()
     pulse_mob.set_stroke(width=max(base_width * 2.0, 5.0))
     return ShowPassingFlash(pulse_mob, time_width=time_width, run_time=run_time)
+
+
+class VectorParallelogram(VGroup):
+    r"""
+    Topic-neutral 2D vector addition diagram showing two vectors,
+    dashed projection edges completing the parallelogram, and the resultant sum.
+
+    Example:
+        diag = VectorParallelogram(
+            u=[2.0, 0.4, 0],
+            v=[0.8, 1.8, 0],
+            u_label=r"\mathbf{u}",
+            v_label=r"\mathbf{v}",
+            sum_label=r"\mathbf{u}+\mathbf{v}",
+        )
+    """
+
+    def __init__(
+        self,
+        u: Sequence[float],
+        v: Sequence[float],
+        origin: Sequence[float] = ORIGIN,
+        u_color: Any = PRIMARY,
+        v_color: Any = SECONDARY,
+        sum_color: Any = ACCENT,
+        u_label: Optional[Union[str, Mobject]] = None,
+        v_label: Optional[Union[str, Mobject]] = None,
+        sum_label: Optional[Union[str, Mobject]] = None,
+        stroke_width: float = 3.0,
+        dash_length: float = 0.08,
+        fill_opacity: float = 0.12,
+        font_size: float = FONT_SIZE_LABEL,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(**kwargs)
+
+        orig = np.array(origin, dtype=float)
+        vec_u = np.array(u, dtype=float)
+        vec_v = np.array(v, dtype=float)
+        p_u = orig + vec_u
+        p_v = orig + vec_v
+        p_sum = orig + vec_u + vec_v
+
+        # Shaded interior polygon
+        self.polygon = Polygon(
+            orig, p_u, p_sum, p_v,
+            fill_color=sum_color,
+            fill_opacity=fill_opacity,
+            stroke_width=0,
+        )
+        self.add(self.polygon)
+
+        # Base vectors u and v
+        self.arrow_u = Arrow(orig, p_u, buff=0, color=u_color, stroke_width=stroke_width)
+        self.arrow_v = Arrow(orig, p_v, buff=0, color=v_color, stroke_width=stroke_width)
+        self.add(self.arrow_u, self.arrow_v)
+
+        # Dashed projection sides
+        self.dash_u_top = DashedLine(p_v, p_sum, color=u_color, dash_length=dash_length, stroke_width=stroke_width * 0.8)
+        self.dash_v_right = DashedLine(p_u, p_sum, color=v_color, dash_length=dash_length, stroke_width=stroke_width * 0.8)
+        self.add(self.dash_u_top, self.dash_v_right)
+
+        # Resultant sum vector
+        self.arrow_sum = Arrow(orig, p_sum, buff=0, color=sum_color, stroke_width=stroke_width * 1.2)
+        self.add(self.arrow_sum)
+
+        # Labels
+        self.u_label_mob: Optional[Mobject] = None
+        if u_label is not None:
+            self.u_label_mob = MathTex(u_label, font_size=font_size, color=u_color) if isinstance(u_label, str) else u_label
+            self.u_label_mob.next_to(self.arrow_u, DOWN, buff=0.15)
+            self.add(self.u_label_mob)
+
+        self.v_label_mob: Optional[Mobject] = None
+        if v_label is not None:
+            self.v_label_mob = MathTex(v_label, font_size=font_size, color=v_color) if isinstance(v_label, str) else v_label
+            self.v_label_mob.next_to(self.arrow_v, LEFT, buff=0.15)
+            self.add(self.v_label_mob)
+
+        self.sum_label_mob: Optional[Mobject] = None
+        if sum_label is not None:
+            self.sum_label_mob = MathTex(sum_label, font_size=font_size, color=sum_color) if isinstance(sum_label, str) else sum_label
+            self.sum_label_mob.next_to(p_sum, UR, buff=0.15)
+            self.add(self.sum_label_mob)
+
 

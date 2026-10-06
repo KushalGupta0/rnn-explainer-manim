@@ -8,18 +8,17 @@ Target Length: **6 minutes (360 seconds)** | Aspect Ratio: **16:9** | Visual Phi
 
 | Scene ID | Title | Tier | Duration | Risk / Complexity |
 | :--- | :--- | :---: | :---: | :--- |
-| `scene01` | **Why RNNs Exist: The Sequence Challenge** | Tier 1 | 40s | Low |
-| `scene02` | **The RNN Cell: First Principles & Dimensions** | Tier 1 | 45s | Low |
+| `scene01` | **Why RNNs Exist: The Sequence Challenge** | Tier 1 | 42s | Low |
+| `scene02` | **The RNN Cell: First Principles & Dimensions** | Tier 1 | 48s | Low |
 | `scene03` | **Unrolling Through Time: Loop vs. DAG** | Tier 1 | 40s | Medium |
-| `scene04` | **The Forward Pass: Numerical State Caching** | Tier 1 | 45s | Low |
-| `scene05` | **Backpropagation Through Time: Gradient Flow** | Tier 1 | 45s | Medium |
-| `scene06` | **The Vanishing Gradient: Exponential Collapse** | Tier 1 | 45s | High |
-| `scene07` | **Exploding Gradients & Norm Clipping Geometry** | Tier 2 | 45s | Medium |
-| `scene08` | **Architectural Evolution: The LSTM Linear Highway** | Tier 2 | 40s | Medium |
-| `scene09` | **Geometric Phase Space & SVD Contraction** | Tier 3 | 15s | High (Optional/Fallback) |
-| **TOTAL**| **Complete Master Curriculum** | — | **360s (6:00)**| — |
+| `scene04` | **The Forward Pass: Numerical State Caching** | Tier 1 | 40s | Low |
+| `scene05` | **Backpropagation Through Time: Gradient Flow** | Tier 1 | 65s | Medium |
+| `scene06` | **The Vanishing Gradient: Exponential Collapse** | Tier 1 | 65s | High |
+| `scene07` | **Exploding Gradients & Norm Clipping Geometry** | Tier 2 | 35s | Medium |
+| `scene08` | **Architectural Evolution: The LSTM Linear Highway** | Tier 2 | 25s | Medium |
+| **TOTAL** | **Complete Master Curriculum** | — | **360s (6:00)**| — |
 
-*Tier 1 Total: 260s (72.2% of video runtime, guaranteeing the core thesis ships under tight deadlines).*
+*Tier 1 Total: 300s (83.3% of 6-minute target runtime, accommodating calm ~120-135 WPM narration).*
 
 ---
 

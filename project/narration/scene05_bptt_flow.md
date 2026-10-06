@@ -1,17 +1,17 @@
 # Spoken Narration: Scene 05 — Backpropagation Through Time: Gradient Flow
 
-**Pacing**: Calm, deliberate, conversational yet precise. Target time: ~45 seconds.
+**Pacing**: Calm, deliberate, conversational. Target duration: 65s (142 words | 131.1 WPM).
 
 ---
 
-### [Beat 1: The Backward Inversion] (0:00 - 0:12 | 12s)
-Once the forward pass reaches the final timestep, time must run in reverse. To compute gradients with respect to our shared parameters, error signals must travel backward through the unrolled computational graph—an algorithm known as Backpropagation Through Time.
+### [Beat 1: The Backward Inversion] (0:00 - 0:15 | 15s)
+Once the forward pass reaches the final step, time runs in reverse. To train shared parameters, error signals flow backward through the unrolled computational graph: Backpropagation Through Time.
 
-### [Beat 2: The Temporal Adjoint] (0:12 - 0:24 | 12s)
-Look at the error ignited at step three. Its gradient flows backward into state $h_3$, then passes across the horizontal connection into state $h_2$. Mathematically, this transition multiplies the incoming gradient by the transpose of the recurrent weight matrix, scaled by the local derivative of the activation function.
+### [Beat 2: The Temporal Adjoint] (0:15 - 0:32 | 17s)
+Watch the error from step three. Its gradient enters state $h_3$, then travels across the horizontal connection into $h_2$. Mathematically, this multiplies the incoming gradient by the transpose weight matrix $W_{hh}^\top$, scaled by the local activation derivative $D_3$.
 
-### [Beat 3: Convergence at the Nexus] (0:24 - 0:35 | 11s)
-At state node $h_2$, notice the critical intersection: two separate streams of error converge. One stream descends vertically from the immediate local loss at step two; the other stream arrives horizontally from the future. By the multivariable chain rule, these two gradient vectors simply add together.
+### [Beat 3: Convergence at the Nexus] (0:32 - 0:49 | 17s)
+At state node $h_2$, two error streams meet: the local loss descending vertically from step two, and the accumulated future error arriving horizontally. By the multivariable chain rule, they simply add together.
 
-### [Beat 4: Accumulating Weight Gradients] (0:35 - 0:45 | 10s)
-Because the recurrent matrix $W_{hh}$ was used at every single timestep, its final gradient update is the cumulative sum of outer products across the entire sequence. Every timestep casts its vote on how the weights should evolve.
+### [Beat 4: Accumulating Weight Gradients] (0:49 - 1:05 | 16s)
+Because matrix $W_{hh}$ was shared across all steps, its final update is the sum of outer products across the entire sequence. Every timestep casts a vote on how weights evolve.
