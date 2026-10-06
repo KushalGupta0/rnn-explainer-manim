@@ -41,3 +41,15 @@ RUN_TIME_SLOW = 1.8
 WAIT_BRIEF = 0.5
 WAIT_NORMAL = 1.2
 WAIT_LONG = 2.0
+
+
+def apply_palette_defaults() -> None:
+    """Configures Manim global defaults for consistent typography across scenes."""
+    from manim import Text, MarkupText
+    Text.set_default(font=FONT_MAIN)
+    MarkupText.set_default(font=FONT_MAIN)
+
+
+# Apply typography defaults automatically on import
+apply_palette_defaults()
+

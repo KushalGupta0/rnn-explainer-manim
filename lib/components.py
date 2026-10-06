@@ -424,12 +424,25 @@ def flow_along(
 ) -> Animation:
     """
     Returns an animation of a glowing signal pulse traveling along a directed path.
+    Arrow tips are automatically excluded to prevent duplicate arrowhead artifacts.
 
     Example:
         self.play(flow_along(connector.arrow, color=ACCENT))
     """
-    pulse_mob = path.copy()
+    target = getattr(path, "arrow", path)
+    pulse_mob = target.copy()
+
+    # Exclude tip submobjects so the pulse does not draw a duplicate arrowhead
+    if hasattr(pulse_mob, "tip") and getattr(pulse_mob, "tip") in pulse_mob.submobjects:
+        pulse_mob.remove(getattr(pulse_mob, "tip"))
+    pulse_mob.submobjects = [
+        sub
+        for sub in pulse_mob.submobjects
+        if not getattr(sub, "__class__", type).__name__.endswith("Tip")
+    ]
+
     pulse_mob.set_color(color)
-    base_width = path.get_stroke_width()
+    base_width = target.get_stroke_width()
     pulse_mob.set_stroke(width=max(base_width * 2.0, 5.0))
     return ShowPassingFlash(pulse_mob, time_width=time_width, run_time=run_time)
+
