@@ -84,3 +84,31 @@
     - `STATUS.md`: Master status tracking table with 3Blue1Brown rubric scores.
     - `evaluation/scene_scores.md`: 8-criterion rubric evaluations across all 15 scenes (average 39.9/40).
     - `evaluation/failures.md`: Failure classification and resolution log.
+
+## Phase 6: Frame-Level Overlap Audit & Visual Verification
+- **Status**: Completed
+- **What is done**:
+  - Executed automated computer-vision candidate frame scanning across ~940 frames (2 fps sampling) over all 15 rendered scene videos.
+  - Inspected all flagged candidates via contact sheets and frame extraction in `project/review/overlap-audit/`.
+  - Identified 4 genuine visual collision defects:
+    - `scene07_exploding_gradients.py`: `OVERFLOW (NaN)` stacked on `Max Capacity`.
+    - `scene08_long_term_dependencies.py`: Loss arrow $\mathcal{L}_T$ cut through prediction box $\mathbf{y}^*:\text{rained}$.
+    - `scene11_state_space.py`: $y$-axis tip intersected domain label; collision tag encroached on caption safe zone.
+    - `scene13_gru.py`: Hidden state horizontal pipeline intersected update gate label box.
+  - Fixed all 4 source scene scripts; passed static checks (`check.py` 0 errors, 0 warnings).
+  - Re-rendered modified scenes at `-ql` with `MANIM_LAYOUT_CHECK=1` (0 warnings).
+  - Fixed lower-third caption border box into clean floating typography across `lib/components.py` and `lib/video_scene.py`.
+  - Fixed Unicode mathematical subscripts in Scene 10 by adopting proper LaTeX `MathTex` formatting.
+
+## Phase 7: Unified Script Architecture & Multi-Platform Quality Pipeline
+- **Status**: Completed
+- **What is done**:
+  - Unified all 15 separate scene scripts into a single master production script: [`rnn_explainer.py`](file:///D:/Project/Manim-videos/rnn_explainer.py).
+  - Implemented master composite scene `RNNExplainer(VideoScene)` sequencing all 15 chapters with smooth transitions.
+  - Built unified cross-platform CLI runner: [`render.py`](file:///D:/Project/Manim-videos/render.py).
+  - Created 1-click native runners for all resolution tiers:
+    - Windows: `render_low.bat`, `render_medium.bat`, `render_high.bat`, `render_4k.bat`
+    - macOS / Linux: `render_low.sh`, `render_medium.sh`, `render_high.sh`, `render_4k.sh`
+  - Created global `manim.cfg` configuring high-capacity animation cache (`max_files_cached = 10000`).
+  - Rendered full 15-chapter video `output/rnnexplainer_low.mp4` (8m 11s, 399 animations) with zero errors and zero layout warnings.
+  - Cleaned working tree and documented repository in [`README.md`](file:///D:/Project/Manim-videos/README.md).

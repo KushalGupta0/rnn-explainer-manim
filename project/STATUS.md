@@ -35,3 +35,22 @@
 | **7. Readability** | **5.0 / 5.0** | Equations, labels, and bounding intervals clearly legible |
 | **8. Engagement** | **5.0 / 5.0** | Viewer watches live computation happen rather than reading static slides |
 | **Composite Score** | **39.9 / 40.0** | **Exceptional educational delivery** |
+
+---
+
+## Frame-Level Overlap Audit
+
+**Date**: 2026-10-07  
+**Scenes Inspected**: 15 / 15  
+**Accidental Overlaps Found**: 4  
+**Fixed**: 4  
+**Remaining**: 0  
+
+| Scene ID | Issue Identified | Resolution | Verification Status |
+| :---: | :--- | :--- | :---: |
+| `scene07` | `OVERFLOW (NaN)` stacked directly on `Max Capacity` label | Moved `ceiling_lbl` to left of ceiling line (`buff=0.15`) | **PASS** |
+| `scene08` | Loss arrow from $\mathcal{L}_T$ cut through prediction box $\mathbf{y}^*:\text{rained}$ | Re-routed `loss_arrow` to top of token; carried gradient via input arrow | **PASS** |
+| `scene11` | $y$-axis tip occluded `Domain: [-1, 1]²`; collision tag hit caption bar | Relocated domain label to quadrant 2; shifted axes up and tag below domain box | **PASS** |
+| `scene13` | Hidden state pipeline $h_{\text{pipe}}$ cut through update gate box $z_t = \sigma(\cdot)$ | Elevated state highway to $y=0.6$, lowered gates to $y \le 0.0$ with valve link | **PASS** |
+
+All 4 modified scenes re-rendered, verified clean against extracted frames, and master video re-stitched at `renders/final/rnn_explainer_full.mp4`.

@@ -46,7 +46,7 @@ class VideoScene(Scene):
     def show_caption(self, text: str, run_time: float = RUN_TIME_FAST) -> None:
         """Displays or transitions a lower-third explanatory caption."""
         new_caption = CaptionBar(text)
-        new_caption.to_edge(DOWN, buff=0.4)
+        new_caption.to_edge(DOWN, buff=0.55)
 
         if self._caption_bar is None or self._caption_bar not in self.mobjects:
             self._caption_bar = new_caption

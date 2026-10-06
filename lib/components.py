@@ -19,6 +19,7 @@ from manim import (
     Matrix,
     Polygon,
     DashedLine,
+    CurvedArrow,
     ShowPassingFlash,
     Animation,
     RIGHT,
@@ -27,6 +28,7 @@ from manim import (
     DOWN,
     UR,
     ORIGIN,
+    TAU,
     WHITE,
 )
 
@@ -37,6 +39,8 @@ from lib.palette import (
     ACCENT,
     MUTED,
     PARAM,
+    INPUT,
+    STATE,
     FONT_MAIN,
     FONT_SIZE_BODY,
     FONT_SIZE_LABEL,
@@ -382,20 +386,10 @@ class CaptionBar(VGroup):
         stroke_width: float = 1.5,
         font_size: float = FONT_SIZE_CAPTION,
         text_color: Any = WHITE,
+        show_box: bool = False,
         **kwargs: Any,
     ) -> None:
         super().__init__(**kwargs)
-
-        self.bar = RoundedRectangle(
-            corner_radius=0.1,
-            width=width,
-            height=height,
-            fill_color=bg_color,
-            fill_opacity=bg_opacity,
-            stroke_color=stroke_color,
-            stroke_width=stroke_width,
-        )
-        self.add(self.bar)
 
         self.label = Text(
             text,
@@ -403,12 +397,27 @@ class CaptionBar(VGroup):
             font_size=font_size,
             color=text_color,
         )
-        self.label.move_to(self.bar.get_center())
+
+        if show_box:
+            self.bar = RoundedRectangle(
+                corner_radius=0.1,
+                width=width,
+                height=height,
+                fill_color=bg_color,
+                fill_opacity=bg_opacity,
+                stroke_color=stroke_color,
+                stroke_width=stroke_width,
+            )
+            self.add(self.bar)
+            self.label.move_to(self.bar.get_center())
+        else:
+            self.bar = None
+
         self.add(self.label)
 
     def set_text(self, new_text: str) -> None:
-        """Updates caption label text and recenters inside bar."""
-        old_center = self.bar.get_center()
+        """Updates caption label text and recenters."""
+        old_center = self.label.get_center()
         self.remove(self.label)
         self.label = Text(
             new_text,
@@ -533,5 +542,101 @@ class VectorParallelogram(VGroup):
             self.sum_label_mob = MathTex(sum_label, font_size=font_size, color=sum_color) if isinstance(sum_label, str) else sum_label
             self.sum_label_mob.next_to(p_sum, UR, buff=0.15)
             self.add(self.sum_label_mob)
+
+
+class RecurrentLoopCell(VGroup):
+    r"""
+    Compact single-cell RNN representation featuring a central processing box,
+    an upward input arrow, an upward readout arrow, and a circular feedback loop.
+
+    Example:
+        cell = RecurrentLoopCell(label="A", loop_label=r"\mathbf{W}_{hh}")
+    """
+
+    def __init__(
+        self,
+        label: Union[str, Mobject] = "A",
+        box_width: float = 1.6,
+        box_height: float = 1.4,
+        loop_label: Optional[Union[str, Mobject]] = r"\mathbf{W}_{hh}",
+        input_label: Optional[Union[str, Mobject]] = r"\mathbf{x}_t",
+        output_label: Optional[Union[str, Mobject]] = r"\mathbf{h}_t",
+        stroke_color: Any = PRIMARY,
+        loop_color: Any = PARAM,
+        input_color: Any = INPUT,
+        output_color: Any = STATE,
+        font_size: float = FONT_SIZE_LABEL,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(**kwargs)
+
+        self.box = LabeledBox(
+            label=label,
+            width=box_width,
+            height=box_height,
+            stroke_color=stroke_color,
+            font_size=FONT_SIZE_BODY,
+        )
+        self.add(self.box)
+
+        # Circular feedback loop curving out of the right side
+        p_start = self.box.get_right() + UP * 0.35
+        p_end = self.box.get_right() + DOWN * 0.35
+        self.loop_arrow = CurvedArrow(
+            p_start,
+            p_end,
+            angle=-TAU * 0.75,
+            color=loop_color,
+            stroke_width=2.5,
+        )
+        self.add(self.loop_arrow)
+
+        self.loop_label_mob: Optional[Mobject] = None
+        if loop_label is not None:
+            self.loop_label_mob = (
+                MathTex(loop_label, font_size=font_size, color=loop_color)
+                if isinstance(loop_label, str)
+                else loop_label
+            )
+            self.loop_label_mob.next_to(self.loop_arrow, RIGHT, buff=0.15)
+            self.add(self.loop_label_mob)
+
+        self.input_arrow = Arrow(
+            self.box.get_bottom() + DOWN * 1.2,
+            self.box.get_bottom(),
+            buff=0.08,
+            color=input_color,
+            stroke_width=2.5,
+        )
+        self.add(self.input_arrow)
+
+        self.input_label_mob: Optional[Mobject] = None
+        if input_label is not None:
+            self.input_label_mob = (
+                MathTex(input_label, font_size=font_size, color=input_color)
+                if isinstance(input_label, str)
+                else input_label
+            )
+            self.input_label_mob.next_to(self.input_arrow, LEFT, buff=0.15)
+            self.add(self.input_label_mob)
+
+        self.output_arrow = Arrow(
+            self.box.get_top(),
+            self.box.get_top() + UP * 1.2,
+            buff=0.08,
+            color=output_color,
+            stroke_width=2.5,
+        )
+        self.add(self.output_arrow)
+
+        self.output_label_mob: Optional[Mobject] = None
+        if output_label is not None:
+            self.output_label_mob = (
+                MathTex(output_label, font_size=font_size, color=output_color)
+                if isinstance(output_label, str)
+                else output_label
+            )
+            self.output_label_mob.next_to(self.output_arrow, LEFT, buff=0.15)
+            self.add(self.output_label_mob)
 
 
