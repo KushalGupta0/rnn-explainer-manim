@@ -16,3 +16,7 @@ media/
 .DS_Store
 Thumbs.db
 *.swp
+
+# Untracked project prompts
+prompt.md
+
